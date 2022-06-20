@@ -1,0 +1,928 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Employee Attrition Predict</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="7cabda0c-6932-40ce-9ab9-851ea2844f80" class="page sans"><header><h1 class="page-title">Employee Attrition Predict</h1></header><div class="page-body"><h3 id="a37be73c-61bf-4347-b99b-72d5cc10ada1" class="">Sinir Ağları ve Makine Öğrenmesi</h3><h3 id="1be955bd-8f78-4db1-b350-84b3cd72b831" class="block-color-blue_background">Burak Yavaş-190701111  |  Ahmet Emin Yalçınkaya-190701107</h3><p id="08a463d3-deca-45aa-9356-548d90f80a9e" class="">
+</p><div id="bd2302ec-27e9-4ce3-aedd-c436d4af96b3" class="column-list"><div id="b6000379-6102-48f5-b6d2-f908c0d8eef0" style="width:50%" class="column"><hr id="fe77d919-9339-4aa4-927f-e46ebcc294e5"/></div><div id="aa29192f-3e08-4f9a-b935-0fa6b8a2df55" style="width:50%" class="column"><p id="2ead67f7-708b-4ad0-b75f-8bb6695d8d88" class="">
+</p></div></div><blockquote id="c877b0da-4b9b-4da1-a7b9-d72044642ee2" class="">Şirketler genellikle her yıl yeni çalışanları eğitmek için büyük miktarda para harcarlar. Bir ciro olduğunda, işe alma ve eğitim sürecinden geçmek maliyetlidir. Bu nedenle çalışan bağlılığı, yönetim ekibinin dikkat etmesi gereken önemli konulardan biridir. Çalışanların yıpranmasına neden olan faktörleri ortaya çıkarmalı ve bu faktörleri ortadan kaldırarak şirket için gerekli olan verimliliği ve sürekliliği artırmak oldukça önemlidir.</blockquote><blockquote id="fb8d71e6-1c59-43ba-a494-5179b2be68bd" class="">Yıpranmaya neden olan faktörleri daha iyi keşfetmek ve karşılaştırmak için kullanıcıların farklı değişkenleri filtrelenmesini ve işlenmesini sağlayacağız.</blockquote><p id="a2b9f5d9-a9a3-413f-956b-06964d30c0de" class="">
+</p><p id="24cadee3-45a0-4c18-aa0c-12aa453cc939" class="">
+</p><p id="dbdbdd0f-4b56-4308-8c12-278ff72b3461" class="">
+</p><ul id="6119c92c-e6be-4a69-b2ba-32806dc7a2ee" class="toggle"><li><details open=""><summary>Süreçler</summary><p id="cbe5d6c6-eb3c-4433-9314-b0214a7138aa" class="">Verilere genel bakış</p><p id="bd5ebea0-46de-41a7-874c-b064379179dd" class="">Kod yapısına genel bakış</p><p id="f2e680f3-a9b0-4d8e-bd3b-cafa4250aed2" class="">Tablolara genel bakış</p><p id="ce3c6b8d-a3e8-4c1d-b10d-20275b96831b" class="">Sonuç</p><p id="8660d604-eaea-4781-9ee8-ddfa935b8134" class="">
+</p></details></li></ul><hr id="53eb4c18-cbe3-4c23-be32-d43a77e008f4"/><h2 id="2ff7b7cf-684a-4a02-906a-0a351782d8b2" class="">Verilere Genel Bakış</h2><p id="8b11b149-66ab-4c56-82d9-b002dafe29f1" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><hr id="a1e9502b-30fb-4a14-a30a-b62be9dad70f"/><div id="a101b61c-cfb8-4041-8b0e-9c0abfe9f2e4" class="column-list"><div id="481c7b09-bbe7-4bc4-a1b2-e1436f6ab458" style="width:56.25%" class="column"><pre id="49f59ef6-15f3-4d86-beff-4b086bead1b4" class="code code-wrap"><code>def dataFile():
+    df = pd.read_csv(&quot;../BigProject/Data/dataset.csv&quot;)
+    return df
+data = dataFile()
+data.columns</code></pre><figure id="4f4815dc-a8bd-4936-a659-b8c786df5c6a" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled.png"><img style="width:624px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled.png"/></a></figure><hr id="89559429-efec-481e-9b7a-f0b5039b805b"/><pre id="fefb6a39-2e93-4e47-b19c-a6693731cbfe" class="code code-wrap"><code>data.info()</code></pre><figure id="8e96a85c-4520-418d-8056-2edba1d78909" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%201.png"><img style="width:1200px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%201.png"/></a></figure><figure id="7de68fde-d72d-4cca-a4c8-49039f9b4756" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%202.png"><img style="width:414px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%202.png"/></a></figure><hr id="941cc76c-a07b-4f78-9aed-9c7b2e2674a4"/><pre id="16173e28-24ee-441d-87e3-36918eb898f4" class="code code-wrap"><code>data = data.drop([&quot;EmployeeCount&quot;,&quot;EmployeeNumber&quot;,&quot;Over18&quot;,&quot;StandardHours&quot;,&quot;Attrition_numerical&quot;], axis=1)</code></pre><p id="8cbc8688-1f5a-4983-8bff-8b985696ce74" class="">
+</p></div><div id="e24fd377-5f8f-4259-a4b4-2c2ad44e9a21" style="width:43.75%" class="column"><blockquote id="e6c5707a-a6b4-4d40-b8ef-0122fecd94bd" class="block-color-gray_background">Ön Hazırlık</blockquote><p id="56cba03a-00cb-43af-b238-97c06c401bff" class="">
+</p><p id="7705dd04-dfe2-403a-b8c4-3fd3497f02ba" class="">dataFile fonksiyonu içersinde data okundu ve features(columns)   bastırıldı.</p><p id="e9064072-eefb-425c-9b6a-add982dde50d" class="">
+</p><p id="2c996380-b56d-4e24-99aa-f0c558663b19" class="">
+</p><p id="ecad541b-9994-487e-bc47-572ddeaf47fb" class="">
+</p><p id="c0796cda-524b-42f6-82c1-c7090f65d337" class="">
+</p><p id="82a6328d-74de-4e3c-8687-52ed06844963" class="">
+</p><p id="07761df2-e772-4935-9972-28b57655450d" class="">
+</p><p id="68c449f9-91bc-41d4-aaf9-327b986b785e" class="">
+</p><p id="4b3325bf-2dc3-4387-b046-8bbdda046f2b" class="">
+</p><hr id="cad240e4-0ee9-4801-aedc-786dfecc2d8f"/><p id="1040bab6-34ba-41c5-9969-ac8690fab9eb" class="">
+</p><ul id="4e1a8984-0bdf-4fb9-b169-aff7eb12b063" class="block-color-gray_background bulleted-list"><li style="list-style-type:disc">data Tipleri , sayıları hakkında veriler</li></ul><p id="d2a44cc6-a7a9-43be-a5af-d7aa15f0efca" class="">
+</p><p id="9a73539d-6959-4878-916f-de6879fcebfe" class="">
+</p><p id="44a7ba0c-d2df-4e32-a0a0-62116738d5f7" class="">
+</p><p id="8bc29e0b-14d2-4cac-97f6-281c4a8d0404" class="">
+</p><p id="0130ac00-d900-4c1b-843d-5b25d8d1881c" class="">
+</p><p id="3bac351c-88e2-4564-ac51-419d1e790b38" class="">
+</p><p id="3072d145-86e7-46ff-8c28-27bc6f9cd4ed" class="">
+</p><p id="9427a2a0-d812-4e18-b63f-29604460c674" class="">
+</p><p id="22e5ea79-6ae1-4e27-8c9c-ceb4db368d73" class="">
+</p><hr id="e8524c4e-8205-428d-9d37-c769ee427bd2"/><ul id="5533878f-0cc8-42c7-90d1-1128ad54269d" class="block-color-gray_background bulleted-list"><li style="list-style-type:disc">Bazı özellikler işlenebilir bir değere sahip değildir bu sebeple verilerin kaldırılması gerekmektedir.</li></ul><p id="4bc5eb44-737c-4172-8f4b-18ade44154b6" class="">
+</p><p id="b73fd266-a655-4032-9ea7-818536163691" class="">
+</p><p id="cf30061e-2313-4db6-9bad-38a7dc2df4b9" class="">
+</p><p id="ff5e972a-ef2b-4d4b-a25b-fc9df33dd485" class="">
+</p><p id="7094d1df-b187-451a-88d7-04b9204867e2" class="">
+</p><p id="337b337a-7688-4909-abac-df435ecc0098" class="">
+</p><p id="861c4beb-1c37-45e6-9a8c-8e1cbc289615" class="">
+</p></div></div><hr id="2937a60e-0fde-418d-a9eb-1a895731b44e"/><p id="4372958a-f9b0-4d58-9f4f-825ced84a6f5" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><p id="3b031271-b3f1-401c-b40c-8678ebf99e79" class="">
+</p><h2 id="8c3d11cb-fdd3-4004-b3b3-a4a5eca093b6" class="">Tablolara Ve Koda Bakış</h2><p id="303ca797-2af8-4e6a-adab-563dc49763a3" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><hr id="80c2d0e7-dabb-4756-a07d-9b32a8094104"/><div id="157671a7-dd06-48b4-a627-169efc688153" class="column-list"><div id="08ae58a4-f47f-4a26-817d-5aceaee4e814" style="width:62.5%" class="column"><pre id="a9729bd2-6888-4590-98ef-2f6e06e78cb7" class="code code-wrap"><code>def pearsonCorr(attrition):
+
+    target_map = {&#x27;Yes&#x27;: 1, &#x27;No&#x27;: 0}
+
+    attrition[&quot;Attrition_numerical&quot;] = attrition[&quot;Attrition&quot;].apply(lambda x: target_map[x])
+
+    numerical = [u&#x27;Age&#x27;, u&#x27;DailyRate&#x27;, u&#x27;DistanceFromHome&#x27;,
+                 u&#x27;Education&#x27;, u&#x27;EmployeeNumber&#x27;, u&#x27;EnvironmentSatisfaction&#x27;,
+                 u&#x27;HourlyRate&#x27;, u&#x27;JobInvolvement&#x27;, u&#x27;JobLevel&#x27;, u&#x27;JobSatisfaction&#x27;,
+                 u&#x27;MonthlyIncome&#x27;, u&#x27;MonthlyRate&#x27;, u&#x27;NumCompaniesWorked&#x27;,
+                 u&#x27;PercentSalaryHike&#x27;, u&#x27;PerformanceRating&#x27;, u&#x27;RelationshipSatisfaction&#x27;,
+                 u&#x27;StockOptionLevel&#x27;, u&#x27;TotalWorkingYears&#x27;,
+                 u&#x27;TrainingTimesLastYear&#x27;, u&#x27;WorkLifeBalance&#x27;, u&#x27;YearsAtCompany&#x27;,
+                 u&#x27;YearsInCurrentRole&#x27;, u&#x27;YearsSinceLastPromotion&#x27;, u&#x27;YearsWithCurrManager&#x27;]
+    data = [
+        go.Heatmap(
+            z = attrition[numerical].astype(float).corr().values,  x = attrition[numerical].columns.values, y = attrition[numerical].columns.values,
+            colorscale = &#x27;Viridis&#x27;,
+            reversescale = False,
+            opacity=1.0
+        )
+    ]
+
+    layout = go.Layout(
+        title=&#x27;Pearson Korelasyonu&#x27;,
+        xaxis=dict(ticks=&#x27;&#x27;, nticks=36),
+        yaxis=dict(ticks=&#x27;&#x27;),
+        width=900, height=700,
+
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+    py.plot(fig, filename=&#x27;labelled-map&#x27;)</code></pre><figure id="113a4365-6956-4432-9bae-bdfff0140b9e" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%203.png"><img style="width:900px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%203.png"/></a></figure><pre id="0da8d2b9-d10c-44ed-bd63-acd8240674b5" class="code code-wrap"><code>def analyseData(attrition):
+
+    f, axes = plt.subplots(3, 3, figsize=(10, 8), sharex=False, sharey=False)
+
+
+    s = np.linspace(0, 3, 10)
+
+    cmap = sns.cubehelix_palette(start=0.0, light=1, as_cmap=True)
+    x = attrition[&#x27;Age&#x27;].values
+    y = attrition[&#x27;TotalWorkingYears&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, cut=5, ax=axes[0, 0])
+    axes[0, 0].set(title=&#x27;Age against Total working years&#x27;)
+
+    cmap = sns.cubehelix_palette(start=0.333333333333, light=1, as_cmap=True)
+    x = attrition[&#x27;Age&#x27;].values
+    y = attrition[&#x27;DailyRate&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[0, 1])
+    axes[0, 1].set(title=&#x27;Age against Daily Rate&#x27;)
+
+    cmap = sns.cubehelix_palette(start=0.666666666667, light=1, as_cmap=True)
+    x = attrition[&#x27;YearsInCurrentRole&#x27;].values
+    y = attrition[&#x27;Age&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[0, 2])
+    axes[0, 2].set(title=&#x27;Years in role against Age&#x27;)
+
+    cmap = sns.cubehelix_palette(start=1.0, light=1, as_cmap=True)
+    x = attrition[&#x27;DailyRate&#x27;].values
+    y = attrition[&#x27;DistanceFromHome&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[1, 0])
+    axes[1, 0].set(title=&#x27;Daily Rate against DistancefromHome&#x27;)
+
+    cmap = sns.cubehelix_palette(start=1.333333333333, light=1, as_cmap=True)
+    x = attrition[&#x27;DailyRate&#x27;].values
+    y = attrition[&#x27;JobSatisfaction&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[1, 1])
+    axes[1, 1].set(title=&#x27;Daily Rate against Job satisfaction&#x27;)
+
+    cmap = sns.cubehelix_palette(start=1.666666666667, light=1, as_cmap=True)
+    x = attrition[&#x27;YearsAtCompany&#x27;].values
+    y = attrition[&#x27;JobSatisfaction&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[1, 2])
+    axes[1, 2].set(title=&#x27;Daily Rate against distance&#x27;)
+
+    cmap = sns.cubehelix_palette(start=2.0, light=1, as_cmap=True)
+    x = attrition[&#x27;YearsAtCompany&#x27;].values
+    y = attrition[&#x27;DailyRate&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[2, 0])
+    axes[2, 0].set(title=&#x27;Years at company against Daily Rate&#x27;)
+
+    cmap = sns.cubehelix_palette(start=2.333333333333, light=1, as_cmap=True)
+    x = attrition[&#x27;RelationshipSatisfaction&#x27;].values
+    y = attrition[&#x27;YearsWithCurrManager&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[2, 1])
+    axes[2, 1].set(title=&#x27;Relationship Satisfaction vs years with manager&#x27;)
+
+    cmap = sns.cubehelix_palette(start=2.666666666667, light=1, as_cmap=True)
+    x = attrition[&#x27;WorkLifeBalance&#x27;].values
+    y = attrition[&#x27;JobSatisfaction&#x27;].values
+    sns.kdeplot(x, y, cmap=cmap, shade=True, ax=axes[2, 2])
+    axes[2, 2].set(title=&#x27;WorklifeBalance against Satisfaction&#x27;)
+
+    f.tight_layout()</code></pre><pre id="3df3d79b-ed6f-4db9-a395-7e3d1facece0" class="code code-wrap"><code>if __name__ == &#x27;__main__&#x27;:
+
+    attrition = readData()
+
+    analyseData(attrition)
+
+    pearsonCorr(attrition)
+
+    attrition = attrition.drop([&#x27;Attrition_numerical&#x27;], axis=1)
+
+    categorical = []
+
+    for col, value in attrition.iteritems():
+        if value.dtype == &#x27;object&#x27;:
+            categorical.append(col)
+
+
+    numerical = attrition.columns.difference(categorical)
+
+    atr_cat = attrition[categorical]
+    atr_cat = atr_cat.drop([&#x27;Attrition&#x27;], axis=1)
+    atr_cat = pd.get_dummies(atr_cat)
+    atr_cat.head(3)
+    atr_num = attrition[numerical]
+    atr_fin = pd.concat([atr_num, atr_cat], axis=1)
+
+    target_map = {&#x27;Yes&#x27;: 1, &#x27;No&#x27;: 0}
+
+    target = attrition[&quot;Attrition&quot;].apply(lambda x: target_map[x])
+
+    train, test, target_train, target_val = train_test_split(atr_fin,
+                                                             target,
+                                                             train_size=0.80,
+                                                             random_state=0);
+
+    oversampler = SMOTE(random_state=0)
+    smote_train, smote_target = oversampler.fit_resample(train, target_train)
+
+    seed = 0  # We set our random seed to zero for reproducibility
+    # Random Forest parameters
+    rf_params = {
+        &#x27;n_jobs&#x27;: -1,
+        &#x27;n_estimators&#x27;: 1000,
+        #     &#x27;warm_start&#x27;: True,
+        &#x27;max_features&#x27;: 0.3,
+        &#x27;max_depth&#x27;: 4,
+        &#x27;min_samples_leaf&#x27;: 2,
+        &#x27;max_features&#x27;: &#x27;sqrt&#x27;,
+        &#x27;random_state&#x27;: seed,
+        &#x27;verbose&#x27;: 0
+    }
+
+    rf = RandomForestClassifier(**rf_params)
+    rf.fit(smote_train, smote_target)
+    rf_predictions = rf.predict(test)
+    print(&quot;Accuracy score: {}&quot;.format(accuracy_score(target_val, rf_predictions)))
+    print(&quot;=&quot; * 80)
+    print(classification_report(target_val, rf_predictions))
+
+    trace = go.Scatter(
+        y=rf.feature_importances_,
+        x=atr_fin.columns.values,
+        mode=&#x27;markers&#x27;,
+        marker=dict(
+            sizemode=&#x27;diameter&#x27;,
+            sizeref=1,
+            size=13,
+            # size= rf.feature_importances_,
+            # color = np.random.randn(500), #set color equal to a variable
+            color=rf.feature_importances_,
+            colorscale=&#x27;Portland&#x27;,
+            showscale=True
+        ),
+        text=atr_fin.columns.values
+    )
+    data = [trace]
+
+    layout = go.Layout(
+        autosize=True,
+        title=&#x27;Random Forest Feature Importance&#x27;,
+        hovermode=&#x27;closest&#x27;,
+        xaxis=dict(
+            ticklen=5,
+            showgrid=False,
+            zeroline=False,
+            showline=False
+        ),
+        yaxis=dict(
+            title=&#x27;Feature Importance&#x27;,
+            showgrid=False,
+            zeroline=False,
+            ticklen=5,
+            gridwidth=2
+        ),
+        showlegend=False
+    )
+    fig = go.Figure(data=data, layout=layout)
+    py.plot(fig, filename=&#x27;scatter&#x27;)</code></pre><figure id="f893b291-f2a2-429d-be92-c4fc69a16823" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%204.png"><img style="width:1480px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%204.png"/></a></figure></div><div id="906c484d-7afb-4fc3-bafa-47372b0dd08b" style="width:37.5%" class="column"><blockquote id="c74bbc7e-a48a-4d32-998e-505a38f17e3d" class="block-color-gray_background"><strong>Pearson Korelasyon Katsayısı</strong></blockquote><p id="d0c95474-ed87-4510-89ec-347326459909" class="">
+</p><p id="56502c34-e83e-4642-afbf-42ae4da20cc7" class="">
+</p><p id="084ff498-abee-4ca0-93da-c82af6edb1b2" class="">Pearson korelasyon katsayısı (r), doğrusal bir korelasyonu ölçmenin en yaygın yoludur. İki değişken arasındaki ilişkinin gücünü ve yönünü ölçen -1 ile 1 arasında bir sayıdır.</p><p id="8f256c43-e83e-4d36-a56b-6f3f8b613f02" class="">
+</p><p id="5da7b25e-9b7b-4069-80c5-e17a7460965b" class="">Pearson korelasyon katsayısı da çıkarımsal bir istatistiktir, yani istatistiksel hipotezleri test etmek için kullanılabilir. Spesifik olarak, iki değişken arasında anlamlı bir ilişki olup olmadığını test edebiliriz.</p><p id="22190b78-60d7-4211-9d28-32c61940c378" class="">
+</p><ul id="f187e462-4263-4792-b9f3-2117a0ea752a" class="bulleted-list"><li style="list-style-type:disc">Pearson korelasyon katsayısı ne zaman kullanılır?
+</li></ul><p id="4de82d48-5d1f-4a10-9a8f-af93b000427b" class="">Pearson korelasyon katsayısı (r), bir korelasyonu ölçmek istediğinizde aralarından seçim yapmanız gereken birkaç korelasyon katsayısından biridir. Pearson korelasyon katsayısı, aşağıdakilerin tümü doğru olduğunda iyi bir seçimdir:</p><ul id="21aff488-42f7-488b-8738-36f71abd9b9d" class="bulleted-list"><li style="list-style-type:disc">Her iki değişken de nicel olduğunda.</li></ul><ul id="d209b313-8ae0-4d02-a350-eab4ba30cc71" class="bulleted-list"><li style="list-style-type:disc">Değişkenlerden herhangi biri nitel ise farklı bir yöntem kullanmanız gerekecektir.</li></ul><ul id="5997dee3-cb75-480e-b03a-f244c76340d0" class="bulleted-list"><li style="list-style-type:disc">Değişkenler normal olarak dağıtıldığında.</li></ul><ul id="df448dc9-656b-4fde-a9f7-7924ad6590b4" class="bulleted-list"><li style="list-style-type:disc"> Dağılımların yaklaşık olarak normal olup olmadığını doğrulamak için her bir değişkenin histogramını da oluşturabiliriz. Değişkenler biraz normal değilse sorun değil.</li></ul><ul id="6fd5eea9-6d8b-4a96-9b1c-7663de0afb3a" class="bulleted-list"><li style="list-style-type:disc">Verilerde aykırı değer olmadığında.</li></ul><ul id="955e9dcd-7da6-44fb-8b51-54556130af5a" class="bulleted-list"><li style="list-style-type:disc"> Aykırı değerler, verilerin geri kalanıyla aynı kalıpları takip etmeyen gözlemlerdir. </li></ul><ul id="83a0127c-30ab-43ba-b6fb-8d9e51a1800a" class="bulleted-list"><li style="list-style-type:disc">İlişki doğrusal olduğunda. </li></ul><ul id="106675f0-2816-48f7-8972-3b8171de43d5" class="bulleted-list"><li style="list-style-type:disc">“Doğrusal”, iki değişken arasındaki ilişkinin düz bir çizgi ile makul ölçüde iyi tanımlanabileceği anlamına gelir.</li></ul><p id="83809eab-1c54-42e8-9f0c-ed939d278c20" class="">
+</p><ul id="b3350c09-fbed-429f-a8b8-cbdd8640e23b" class="bulleted-list"><li style="list-style-type:disc">Pearson korelasyon katsayısının hesaplanması</li></ul><figure id="4288caae-ffc5-49f7-b996-26f51a777d39" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%205.png"><img style="width:346px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%205.png"/></a></figure><p id="db603ad3-10a9-4b15-9301-90f0cb419b52" class="">
+</p><p id="8926f23c-b832-4104-ac91-20ada84bf57a" class="">
+</p><p id="93bf5949-37f5-4e8c-864c-b0b09b766c54" class="">
+</p><p id="97099cbb-d882-4eb8-b53b-e464bf67aa09" class="">
+</p><p id="31228ade-3db6-4b3e-94b7-8f1d0a86d1f2" class="">
+</p><p id="3b978380-e6c2-4ba8-8368-17f675157767" class="">
+</p><p id="b1d9ba19-15a0-4e40-91ad-b84066353f40" class="">
+</p><p id="b4e90dd4-cfd3-4db3-8a04-ed80b8f70810" class="">
+</p><blockquote id="8a298126-8af1-4243-9797-e3b1e960cf4b" class="block-color-gray_background"><strong>Random Forrest</strong></blockquote><p id="5a6c38f4-8b1b-4fb9-9725-b02f43cfe009" class="">
+</p><blockquote id="83593e34-730a-4ed5-b3aa-de6c17e01ebb" class="block-color-gray_background">Random Forest:Birden fazla karar ağacının kullanılarak daha uyumlu modeller üreterek daha stabil bir sınflandırma yapmya çalışan classification  yapısıdır.</blockquote><p id="30488825-c2d2-40e2-b71d-5e8af02160d0" class="">
+</p><figure id="fa229227-8437-48b5-a170-d74b9ff9e4df" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%206.png"><img style="width:632px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%206.png"/></a></figure><p id="19a3ebae-97a7-4f50-980d-d6028089ca6c" class="">
+</p><ul id="f86a733c-519d-4bc4-8ef4-c79b74176da5" class="block-color-gray_background bulleted-list"><li style="list-style-type:disc"> Scikitlearn kütüphanesi içerisinden RandomForestClassifier çağrıldı. Bu fonksiyon ile   tahmin verisi ile  test tahmin  verisi arasına karşılaştırma gerçekleştirmektedir.</li></ul><ul id="ff7e4b70-43ec-456b-9ac8-dc6b9abc27d9" class="bulleted-list"><li style="list-style-type:disc">Regresyon sorunlarını çözmek için RFC kullanılırken verilerinizin her düğümden nasıl dallanacağını gösteren ortalama kare hatası uygulanmaktadır.</li></ul><ul id="92f54d7a-52ef-4aa4-992e-50baf84977d4" class="bulleted-list"><li style="list-style-type:disc">RFC algoritması ister regresyon ister sınıflandırma verileri olsun tüm farklı veri kümeleri türleri için son derece yararlı olabilir. Kullanımı kolaydır, eğitilmesi hızlıdır ve kullandığı karar ağaçalarının doğru bir temsilini bulur.</li></ul></div></div><hr id="34b347a1-4d1c-401f-a9fe-3b9181793baa"/><p id="72b309e4-5dd9-4538-b192-2e76db34d34b" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><h2 id="360f37a8-cd80-4a67-8079-dcf2c47a4940" class="">Acuraccy</h2><p id="5ef5306f-5b78-4c46-8a6e-d3f2832b3077" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><hr id="3ba20aa7-d3fe-4f4f-b15c-b85c90e24574"/><div id="3a3fa344-dc4a-4066-9cf5-303bf2d8a458" class="column-list"><div id="ed4a05d5-6022-4b01-9b04-7fb73c8255aa" style="width:56.25%" class="column"><pre id="2c586b17-c3f6-4a9d-b707-a163c52c104d" class="code code-wrap"><code>rf = RandomForestClassifier(**rf_params)
+    rf.fit(smote_train, smote_target)
+    rf_predictions = rf.predict(test)
+    print(&quot;Accuracy score: {}&quot;.format(accuracy_score(target_val, rf_predictions)))
+    print(&quot;=&quot; * 80)
+    print(classification_report(target_val, rf_predictions))</code></pre><figure id="9edf193e-305a-47fb-934a-490a232a7a25" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%207.png"><img style="width:432px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%207.png"/></a></figure></div><div id="118b00c3-8c66-46f0-874e-6f070fca1591" style="width:43.75000000000001%" class="column"><blockquote id="fd488c03-2288-4d40-8daa-81aac5dd7a22" class="block-color-gray_background">Accuracy Score:</blockquote><p id="bd642212-01eb-4959-9e32-605beffafcf3" class="">
+</p><figure id="1b74a7e3-35ec-44a3-aa56-ed2ccfe3abaa" class="image"><a href="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%208.png"><img style="width:432px" src="Employee%20Attrition%20Predict%204f4815dca8bd4936a659b8c786df5c6a/Untitled%208.png"/></a></figure><p id="673b5942-76fb-4ff2-9919-f7265689a275" class="">
+</p><ul id="3577494f-64b8-4cd7-98b7-7a8db41196d8" class="block-color-gray_background bulleted-list"><li style="list-style-type:disc">Modelin tüm sınıflarda nasıl performans gösterdiğini tanımlayan bir ölçümdür.Sınıflar eşit öneme sahip kabul görür ı </li></ul><p id="0d43b9ba-b5fd-4e89-88aa-1aec5d7cc84e" class="">
+</p><figure id="97fe13ce-1c34-4600-bdf0-aee3a82c8745" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>D</mi><mi>o</mi><mover accent="true"><mi>g</mi><mo>˘</mo></mover><mi>r</mi><mi>u</mi><mi>T</mi><mi>a</mi><mi>h</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">/</mi><mi>T</mi><mi>o</mi><mi>p</mi><mi>l</mi><mi>a</mi><mi>m</mi><mi>T</mi><mi>a</mi><mi>h</mi><mi>m</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Doğru Tahmin / Toplam Tahmin</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Do</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;"><span class="mord">˘</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">ahmin</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">ahmin</span></span></span></span></span></div></figure></div></div><hr id="47d500d6-0873-43b8-aa9d-f233ab76ea2a"/><p id="4061b575-73e0-4592-b63d-e30455b4be85" class="">
+</p><p id="1a393881-6a02-407f-ab86-f32cc8bc71af" class="">
+</p><p id="91dbddc9-8cf9-45be-a84a-82cd8f673a54" class="">
+</p><p id="a19e1b77-df0d-40ad-8a8d-fc46882946d0" class="">
+</p><hr id="2c78248e-d217-4207-aef2-dd3887752bea"/><h2 id="9d37e54d-0ee8-4ade-a8bd-7a15009ce77a" class="">Kaynakça</h2><p id="473e3ba0-a566-42a8-86fc-3cf9868836d4" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><figure id="d01bb214-87cf-4543-a7c5-e94f970cba6a"><a href="https://machinelearningmastery.com/how-to-use-correlation-to-understand-the-relationship-between-variables/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">How to Calculate Correlation Between Variables in Python - Machine Learning Mastery</div><div class="bookmark-description">There may be complex and unknown relationships between the variables in your dataset. It is important to discover and quantify the degree to which variables in your dataset are dependent upon each other.</div></div><div class="bookmark-href"><img src="https://machinelearningmastery.com/wp-content/uploads/2019/09/icon-16x16.png" class="icon bookmark-icon"/>https://machinelearningmastery.com/how-to-use-correlation-to-understand-the-relationship-between-variables/</div></div><img src="https://machinelearningmastery.com/wp-content/uploads/2018/03/Scatter-plot-of-the-test-correlation-dataset.png" class="bookmark-image"/></a></figure><figure id="0e5ed0c2-2627-471f-87a0-a1d588372618"><a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">sklearn.ensemble.RandomForestClassifier</div><div class="bookmark-description">A random forest classifier. A random forest is a meta estimator that fits a number of decision tree classifiers on various sub-samples of the dataset and uses averaging to improve the predictive accuracy and control over-fitting. The sub-sample size is controlled with the max_samples parameter if bootstrap=True (default), otherwise the whole dataset is used to build each tree.</div></div><div class="bookmark-href"><img src="https://scikit-learn.org/stable/_static/favicon.ico" class="icon bookmark-icon"/>https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html</div></div><img src="https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png" class="bookmark-image"/></a></figure><figure id="e5ffe363-7ce5-4b96-b47b-4b8c45d18636"><a href="https://www.ibm.com/cloud/learn/random-forest" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">What is Random Forest?</div><div class="bookmark-description">Learn about the random forest algorithm and how it can help you make better decisions to reach your business goals.</div></div><div class="bookmark-href"><img src="https://www.ibm.com/favicon.ico" class="icon bookmark-icon"/>https://www.ibm.com/cloud/learn/random-forest</div></div><img src="https://1.cms.s81c.com/sites/default/files/styles/ibm_cloud_wide_background/public/2020-12-07/Learn%20Leadspace%204.jpg?itok=-6yTEuam" class="bookmark-image"/></a></figure><figure id="dba9ff80-6c20-4bf9-a7e8-2136b8df9305"><a href="https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">IBM HR Analytics Employee Attrition &amp; Performance</div><div class="bookmark-description">Predict attrition of your valuable employees</div></div><div class="bookmark-href"><img src="https://www.kaggle.com/static/images/favicon.ico" class="icon bookmark-icon"/>https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset</div></div><img src="https://storage.googleapis.com/kaggle-datasets-images/1067/1925/5fc43e97e25975d1a14cba2e706255cb/dataset-card.jpg" class="bookmark-image"/></a></figure><hr id="ccf48518-f5fd-40c9-b0b9-b52e8d5680d8"/><p id="307d28ac-983d-42e4-8c85-73ff48104950" class="">➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖</p><p id="29e770ad-9d34-416f-b045-961e409bee4f" class="">
+</p><p id="7d59997e-676e-4ab1-9e42-e51812e4e983" class="">
+</p></div></article></body></html>
